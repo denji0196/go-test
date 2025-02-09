@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useState } from "react";
 import * as React from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -138,7 +138,7 @@ export function TodoList() {
             newBody: newBody, // body ใหม่ที่ถูกแก้ไข
           });
         }
-  
+
         // รีเซ็ตสถานะหลังการอัปเดต
         setEditingTodo(null); // ปิดฟอร์ม
         setNewBody(""); // รีเซ็ตค่าฟอร์ม
@@ -148,18 +148,25 @@ export function TodoList() {
       }
     }
   };
-  
 
   // ฟังก์ชันสำหรับการเปลี่ยนสถานะ
   const handleStatusChange = (todoId: string, currentCompleted: boolean, newBody: string) => {
     setIsStatusUpdate(true); // ตั้งค่าเป็นการอัปเดตสถานะ
+  
+    // เรียกใช้ mutation เพื่ออัปเดตสถานะและ body
     mutation.mutateAsync({
       id: todoId,
       completed: !currentCompleted, // เปลี่ยนสถานะ
       newBody: newBody, // ส่ง body ไปด้วย (ถ้าค่า body เปลี่ยนแปลง)
+    }).then(() => {
+      // เคลียร์สถานะหลังจากการอัปเดตสำเร็จ
+      setEditingTodo(null); // ปิดฟอร์ม
+      setNewBody(""); // รีเซ็ตค่าฟอร์ม
+      setIsStatusUpdate(false); // รีเซ็ตตัวแปรสถานะการอัปเดต
+    }).catch((error) => {
+      console.error("Failed to update status:", error);
     });
   };
-  
 
   // การเปิดฟอร์มแก้ไข
   const handleEditClick = (todo: Todo) => {
@@ -206,11 +213,11 @@ export function TodoList() {
         const isCompleted = row.getValue("completed") as boolean;
         const todoId = row.original._id;
         const todoBody = row.original.body; // ดึงค่า body ของ todo ที่กำลังแสดง
-      
+
         const handleStatusClick = () => {
           handleStatusChange(todoId, isCompleted, todoBody); // ส่งทั้ง todoId, completed, และ body
         };
-      
+
         return (
           <Button
             variant={isCompleted ? "default" : "outline"}
@@ -296,19 +303,16 @@ export function TodoList() {
   ];
 
   // ใช้ React Table
-  const {
-    getHeaderGroups,
-    getRowModel,
-    getState,
-    setPageSize,
-  } = useReactTable({
-    data: todos || [],
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-  });
+  const { getHeaderGroups, getRowModel, getState, setPageSize } = useReactTable(
+    {
+      data: todos || [],
+      columns,
+      getCoreRowModel: getCoreRowModel(),
+      getSortedRowModel: getSortedRowModel(),
+      getFilteredRowModel: getFilteredRowModel(),
+      getPaginationRowModel: getPaginationRowModel(),
+    }
+  );
 
   if (isLoading) return <div>Loading...</div>;
   if (error instanceof Error) return <div>{error.message}</div>;
@@ -318,16 +322,32 @@ export function TodoList() {
       <div className="space-y-4">
         <h1 className="text-2xl font-bold">Todo List</h1>
         <div className="flex justify-between items-center">
-          {editingTodo && (
-            <div className="space-x-4">
-              <Input
-                value={newBody}
-                onChange={(e) => setNewBody(e.target.value)}
-                placeholder="Edit todo"
-              />
-              <Button onClick={handleUpdateTodo}>Save Changes</Button>
-            </div>
-          )}
+        {editingTodo && (
+        <div className="space-x-4">
+          {/* ปรับขนาดของ Input */}
+          <Input
+            value={newBody}
+            onChange={(e) => setNewBody(e.target.value)}
+            placeholder="Edit todo"
+            className="w-full max-w-md" // ปรับขนาดของ Input
+          />
+          {/* ปรับขนาดของปุ่ม Save Changes */}
+          <Button 
+            onClick={handleUpdateTodo} 
+            className="px-4 py-2 text-sm"
+          >
+            Save Changes
+          </Button>
+          {/* ปรับขนาดของปุ่ม Cancel */}
+          <Button 
+            variant="outline" 
+            onClick={() => setEditingTodo(null)} 
+            className="px-4 py-2 text-sm"
+          >
+            Cancel
+          </Button>
+        </div>
+      )}
         </div>
         <Table>
           <TableHeader>
@@ -335,7 +355,10 @@ export function TodoList() {
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <TableHead key={header.id}>
-                    {flexRender(header.column.columnDef.header, header.getContext())}
+                    {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
                   </TableHead>
                 ))}
               </TableRow>
