@@ -143,12 +143,29 @@ func updateTodos(c *fiber.Ctx) error {
 		return c.Status(404).JSON(fiber.Map{"error": "Todo not found"})
 	}
 
-	// อัปเดตสถานะเป็น Completed
-	todo.Completed = true
+	// รับข้อมูลใหม่จาก request body
+	var requestData struct {
+		Body      string `json:"body"`
+		Completed bool   `json:"completed"`
+	}
+
+	if err := c.BodyParser(&requestData); err != nil {
+		return c.Status(400).JSON(fiber.Map{"error": "Invalid input"})
+	}
+
+	// อัปเดตข้อมูล
+	todo.Body = requestData.Body // ตั้งค่า body ใหม่
+	todo.Completed = requestData.Completed
 	todo.UpdatedAt = time.Now()
 
 	// อัปเดตข้อมูลใน MongoDB
-	update := bson.M{"$set": bson.M{"completed": todo.Completed, "updated_at": todo.UpdatedAt}}
+	update := bson.M{
+		"$set": bson.M{
+			"completed":  todo.Completed,
+			"updated_at": todo.UpdatedAt,
+			"body":       todo.Body,
+		},
+	}
 	_, err = collection.UpdateOne(context.Background(), bson.M{"_id": objectID}, update)
 	if err != nil {
 		return err
