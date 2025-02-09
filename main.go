@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/gofiber/fiber/v2"
-	// "github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -60,10 +60,11 @@ func main() {
 	app := fiber.New()
 
 	// ใช้ middleware CORS
-	// app.Use(cors.New(cors.Config{
-	// 	AllowOrigins: "http://localhost:3000",
-	// 	AllowHeaders: "Origin,Content-Type,Accept",
-	// }))
+	app.Use(cors.New(cors.Config{
+		AllowOrigins: "https://go-test-tawny.vercel.app", // ✅ ใส่ URL ของ Next.js
+		AllowMethods: "GET,POST,PATCH,DELETE",
+		AllowHeaders: "Origin, Content-Type, Accept",
+	}))
 
 	// Routes
 	app.Get("/api/todos", getTodos)
