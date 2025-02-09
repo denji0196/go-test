@@ -1,0 +1,1 @@
+export const BASE_URL = process.env.MODE === "development" ? "http://localhost:5000/api" : "/api";
