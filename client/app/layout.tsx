@@ -2,12 +2,10 @@ import Navbar from "@/components/Navbar/Navbar";
 import "./globals.css";
 import { Metadata } from "next";
 import Providers from "./provider";
-import TodoForm from "@/components/ListItem/TodoCreate";
-import { TodoList } from "@/components/ListItem/TodoList";
 
 export const metadata: Metadata = {
-  title: "Kira",
-  description: "hello world",
+  title: "SECRET_PROJECT",
+  description: "SECRET_PROJECT",
   keywords: ["Next.js"],
 };
 
