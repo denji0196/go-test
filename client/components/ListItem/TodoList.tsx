@@ -302,7 +302,7 @@ export function TodoList() {
     },
   ];
 
-  // ใช้ React Table
+
   const { getHeaderGroups, getRowModel, getState, setPageSize } = useReactTable(
     {
       data: todos || [],
@@ -324,21 +324,18 @@ export function TodoList() {
         <div className="flex justify-between items-center">
         {editingTodo && (
         <div className="space-x-4">
-          {/* ปรับขนาดของ Input */}
           <Input
             value={newBody}
             onChange={(e) => setNewBody(e.target.value)}
             placeholder="Edit todo"
-            className="w-full max-w-md" // ปรับขนาดของ Input
+            className="w-full max-w-md"
           />
-          {/* ปรับขนาดของปุ่ม Save Changes */}
           <Button 
             onClick={handleUpdateTodo} 
             className="px-4 py-2 text-sm"
           >
             Save Changes
           </Button>
-          {/* ปรับขนาดของปุ่ม Cancel */}
           <Button 
             variant="outline" 
             onClick={() => setEditingTodo(null)} 
