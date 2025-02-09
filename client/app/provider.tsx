@@ -7,7 +7,7 @@ import { ThemeProvider } from "./theme-provider";
 interface ProvidersProps {
   children: ReactNode;
 }
-
+export const BASE_URL = process.env.MODE === "development" ? "http://localhost:5000/api" : "/api";
 const Providers = ({ children }: ProvidersProps) => {
   const [queryClient] = useState(() => new QueryClient()); // ✅ สร้าง QueryClient หนึ่งตัว
 

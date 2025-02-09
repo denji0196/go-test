@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 
 
-export const createCamp = async(prevState,formData)=>{
+export const createCamp = async(_prevState: any,formData: Iterable<readonly [PropertyKey, any]>)=>{
     // const title = formData.get('title')
     // const location = formData.get('location')
     const rawData = Object.fromEntries(formData)

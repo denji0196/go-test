@@ -1,4 +1,3 @@
-import { CircleUserRoundIcon } from "lucide-react"
 import AvatarIcon from "./Avatar"
 
 

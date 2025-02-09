@@ -169,10 +169,10 @@ export function TodoList() {
   };
 
   // การเปิดฟอร์มแก้ไข
-  const handleEditClick = (todo: Todo) => {
-    setEditingTodo(todo);
-    setNewBody(todo.body); // ตั้งค่า newBody ให้ตรงกับ body ของ todo
-  };
+  // const handleEditClick = (todo: Todo) => {
+  //   setEditingTodo(todo);
+  //   setNewBody(todo.body); // ตั้งค่า newBody ให้ตรงกับ body ของ todo
+  // };
 
   // กำหนดคอลัมน์ของตาราง
   const columns: ColumnDef<Todo>[] = [
@@ -303,7 +303,7 @@ export function TodoList() {
   ];
 
 
-  const { getHeaderGroups, getRowModel, getState, setPageSize } = useReactTable(
+  const { getHeaderGroups, getRowModel} = useReactTable(
     {
       data: todos || [],
       columns,

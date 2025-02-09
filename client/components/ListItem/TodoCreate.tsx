@@ -40,19 +40,29 @@ const TodoForm = () => {
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || "Something went wrong");
 
-        setNewTodo(""); // เคลียร์ input เมื่อสำเร็จ
+        setNewTodo("");
         return data;
-      } catch (error: any) {
-        console.error("Error creating todo:", error);
-        alert(error.message || "Error creating todo");
+      } catch (error) {
+        if (error instanceof Error) {
+          console.error("Error creating todo:", error);
+          alert(error.message || "Error creating todo");
+        } else {
+          console.error("Unknown error:", error);
+          alert("Unknown error occurred while creating todo.");
+        }
       }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["todos"] }); // รีเฟรชข้อมูล Todos
     },
-    onError: (error: any) => {
-      console.error("Error:", error);
-      alert(error.message);
+    onError: (error: unknown) => {
+      if (error instanceof Error) {
+        console.error("Error:", error);
+        alert(error.message);
+      } else {
+        console.error("Unknown error:", error);
+        alert("An unknown error occurred.");
+      }
     },
   });
 
