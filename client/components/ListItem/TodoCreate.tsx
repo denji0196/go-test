@@ -29,7 +29,7 @@ const TodoForm = () => {
       }
 
       try {
-        const res = await fetch(`http://localhost:5000/api/todos`, {
+        const res = await fetch(`https://go-test-production-cfb7.up.railway.app/api/todos`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

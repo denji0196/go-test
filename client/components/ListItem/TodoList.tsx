@@ -42,7 +42,7 @@ export type Todo = {
 
 // ฟังก์ชันลบ Todo
 const deleteTodo = async (id: string) => {
-  const res = await fetch(`http://localhost:5000/api/todos/${id}`, {
+  const res = await fetch(`https://go-test-production-cfb7.up.railway.app/api/todos/${id}`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
@@ -65,7 +65,7 @@ const updateTodoStatusAndBody = async ({
   completed: boolean;
   newBody: string;
 }) => {
-  const res = await fetch(`http://localhost:5000/api/todos/${id}`, {
+  const res = await fetch(`https://go-test-production-cfb7.up.railway.app/api/todos/${id}`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
@@ -91,7 +91,7 @@ export function TodoList() {
   } = useQuery({
     queryKey: ["todos"],
     queryFn: async () => {
-      const res = await fetch("http://localhost:5000/api/todos");
+      const res = await fetch("https://go-test-production-cfb7.up.railway.app/api/todos");
       if (!res.ok) {
         throw new Error("Error fetching todos");
       }
